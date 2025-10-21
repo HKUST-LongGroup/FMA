@@ -3,6 +3,12 @@
 Official implementation of the paper **"Exploring Cross-Modal Flows for Few-Shot Learning"**.
 
 
+## TODO 
+- FMA framework.
+- Support CLIP extractor.
+- Other extractor and checkpoints: coop, cocoop, lora, adapter.
+
+
 ## Table of Contents
 
 - [Installation](#installation)
@@ -26,8 +32,8 @@ Official implementation of the paper **"Exploring Cross-Modal Flows for Few-Shot
 
 
 ```bash
-git clone https://github.com/ZiQi-Jiang/ICLR2026.git
-cd ICLR2026
+git clone https://github.com/HKUST-LongGroup/FMA.git
+cd FMA
 ```
 
 

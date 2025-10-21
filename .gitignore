@@ -57,8 +57,9 @@ Desktop.ini
 checkpoints/
 output/
 
-# Data directory (dataset files are too large)
-data/
+# Data directory (dataset files are too large, including symbolic links)
+data/*
+!data/README.md
 datasets/data/
 
 # Log files
@@ -85,3 +86,4 @@ logs/
 # Translation and documentation temp files
 TRANSLATION_SUMMARY.md
 COMMAND_LINE_USAGE.md
+GITHUB_UPLOAD_GUIDE.md
