@@ -84,6 +84,4 @@ logs/
 .ipynb_checkpoints/
 
 # Translation and documentation temp files
-TRANSLATION_SUMMARY.md
-COMMAND_LINE_USAGE.md
-GITHUB_UPLOAD_GUIDE.md
+/data 

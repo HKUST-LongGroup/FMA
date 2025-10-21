@@ -1,11 +1,11 @@
 # Exploring Cross-Modal Flows for Few-Shot Learning
 
-Official implementation of the paper **"Exploring Cross-Modal Flows for Few-Shot Learning"**.
+Official implementation of the paper [Exploring Cross-Modal Flows for Few-Shot Learning](https://arxiv.org/abs/2510.14543).
 
 
 ## TODO 
-- FMA framework.
-- Support CLIP extractor.
+- FMA framework. ✅
+- Support CLIP extractor. ✅
 - Other extractor and checkpoints: coop, cocoop, lora, adapter.
 
 
@@ -41,7 +41,8 @@ cd FMA
 conda create -n fma python=3.8.20
 conda activate fma
 conda install pytorch==2.3.0 torchvision==0.18.0 torchaudio==2.3.0 pytorch-cuda=12.1 -c pytorch -c nvidia
-pip install git+https://github.com/openai/CLIP.git, scipy==1.10.1
+pip install git+https://github.com/openai/CLIP.git
+pip install scipy==1.10.1
 ```
 
 ## 📁 Dataset Preparation
@@ -189,3 +190,15 @@ This will:
 - [CoOp](https://github.com/KaiyangZhou/CoOp) for dataset preparation scripts
 
 
+## Citation
+```
+@misc{jiang2025exploringcrossmodalflowsfewshot,
+      title={Exploring Cross-Modal Flows for Few-Shot Learning}, 
+      author={Ziqi Jiang and Yanghao Wang and Long Chen},
+      year={2025},
+      eprint={2510.14543},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2510.14543}, 
+}
+```
