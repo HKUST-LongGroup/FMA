@@ -85,3 +85,7 @@ logs/
 
 # Translation and documentation temp files
 /data 
+
+.folder_desc
+
+*.ipynb

@@ -51,12 +51,6 @@ def main():
     model.train()
     for epoch in range(cfg.epochs):
     # every 20 epochs, evaluate the model on the test set, then save the best model
-        if epoch % 50 == 0:
-            print(f'[Testing] On Test Dataset:',end=' ')
-            test_fma(model,test_loader,feat_extractor,steps=1,stepsize=0.1, cfg=cfg)
-
-            print(f'[Testing] On Training Dataset:',end=' ')
-            test_fma(model,train_loader,feat_extractor,steps=1,stepsize=0.1,cfg=cfg)
 
         for images,labels in train_loader:
             
@@ -92,8 +86,15 @@ def main():
                 scheduler.step()
 
         print(f"[Training] Epoch [{epoch+1}/{cfg.epochs}], Loss: {loss.item():.4f}, LR: {optimizer.param_groups[0]['lr']:.6f}") 
+        
+        if (epoch+1) % 50 == 0:
+            print(f'[Testing] On Test Dataset:',end=' ')
+            test_fma(model,test_loader,feat_extractor,steps=1,stepsize=0.1, cfg=cfg)
 
-    print(f'[Testing] On Test Dataset ',end=' ')
+            print(f'[Testing] On Training Dataset:',end=' ')
+            test_fma(model,train_loader,feat_extractor,steps=1,stepsize=0.1,cfg=cfg)
+
+    print(f'Final Testing On Test Dataset ',end=' ')
     test_acc = test_fma(model,test_loader,feat_extractor,steps=1,stepsize=0.1, cfg=cfg)
 
     torch.save(model.state_dict(), os.path.join(cfg.save_dir,'model.pth'))

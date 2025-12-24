@@ -53,7 +53,7 @@ class TimestepEmbedder(nn.Module):
     def timestep_embedding(t, dim, max_period=10000):
         """
         Create sinusoidal timestep embeddings.
-        :param t: a 2-D Tensor of N indices of timesteps.[N,1]
+        :param t: [N,1], float in [0,1]
         :param dim: the dimension of the output.
         :param max_period: controls the minimum frequency of the embeddings.
         :return: an (N, D) Tensor of positional embeddings.
@@ -70,6 +70,7 @@ class TimestepEmbedder(nn.Module):
         return embedding
 
     def forward(self, t):
+        t = t * 1000.0  # scale t from [0,1] to [0,1000]
         t_freq = self.timestep_embedding(t, self.frequency_embedding_size)
         t_emb = self.mlp(t_freq)
         return t_emb
