@@ -44,7 +44,7 @@ class DefaultConfig:
         self.weight_decay = 0.01
         self.optimizer = 'adamw'
         self.seed = 1
-        
+        self.gamma = 0 # control the stochastic noise level
         # =================================================================
         #  Model and Dataset Specific Parameters
         # =================================================================
@@ -107,7 +107,8 @@ class DefaultConfig:
         parser.add_argument('--feature_extractor', type=str, default=None,
                           choices=['clip', 'coop', 'cocoop'],
                           help='Feature extractor to use (clip, coop, or cocoop)')
-        
+        parser.add_argument('--gamma', type=float, default=None,
+                          help='Stochastic noise level for feature interpolation')
         args = parser.parse_args()
         
         # Only update user-specified parameters (non-None parameters)
@@ -117,6 +118,8 @@ class DefaultConfig:
             self.num_shots = args.num_shots
         if args.feature_extractor is not None:
             self.feature_extractor = args.feature_extractor
+        if args.gamma is not None:
+            self.gamma = args.gamma
         
         return self
     

@@ -61,15 +61,17 @@ def main():
                 t = torch.rand(image_features.size(0),1,device=cfg.device)
                 # FMC Framework
                 # (1) interpolate the features
-                interpolated_features = (1 - t) * image_features + t * text_features
+                noise = torch.randn_like(image_features)
+                interpolated_features = (1 - t) * image_features + t * text_features + cfg.gamma*torch.sqrt(t*(1-t))*noise
 
                 # (2) predict the velocity
-                velocity = model(interpolated_features,t)
+                velocity_pred = model(interpolated_features,t)
 
                 # (3) feature transfer to the target x_1
-                transfer_features = interpolated_features + velocity* (1-t)
+                # transfer_features = interpolated_features + velocity* (1-t)
+                velocity_gt = text_features - image_features + cfg.gamma* 0.5*(1-2*t)/torch.sqrt(t*(1-t))*noise
 
-                loss = torch.sum((transfer_features-text_features)**2,dim=1).mean() 
+                loss = torch.sum((velocity_pred-velocity_gt)**2,dim=1).mean() 
 
             optimizer.zero_grad()
             scalar.scale(loss).backward()
