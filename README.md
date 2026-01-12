@@ -5,8 +5,8 @@ Official implementation of the paper [Exploring Cross-Modal Flows for Few-Shot L
 
 ## TODO 
 - FMA framework. ✅
-- Support CLIP extractor. ✅
-- Other extractor and checkpoints: coop, cocoop, lora, adapter.
+- Support CLIP and CoOp extractor. ✅
+- Other extractor and checkpoints: cocoop, lora, adapter.
 
 
 ## Table of Contents
@@ -59,7 +59,7 @@ mkdir -p data
 
 3. The expected directory structure:
 ```
-data/
+.data/
 ├── oxford_pets/
 ├── eurosat/
 ├── ucf101/
@@ -73,6 +73,18 @@ data/
 └── imagenet/
 ```
 
+4. For feature extractors like coop, cocoop, adapter and lora, first download according pre-trained checkpoints, and put them in the checkpoints folder, the expected directory structure:
+```
+checkpoints/
+├── eurosat/
+│   └── coop/
+│       └── vit_b16_16s.pth
+|   └── cocoop/
+│       └── vit_b16_16s.pth
+|   └── ...
+├── oxford_pets/
+├── ...
+```
 ## 🚀 Training
 
 ###  Basic Training
@@ -95,7 +107,7 @@ python train.py --dataset OxfordPets
 python train.py --dataset EuroSAT --num_shots 8
 
 # Choose feature extractor
-python train.py --feature_extractor clip
+python train.py --feature_extractor coop
 
 # Combine multiple options
 python train.py --dataset UCF101 --num_shots 4 --feature_extractor clip
