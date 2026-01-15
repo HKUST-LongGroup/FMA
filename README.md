@@ -73,7 +73,7 @@ mkdir -p data
 └── imagenet/
 ```
 
-4. For feature extractors like coop, cocoop, adapter and lora, first download according pre-trained checkpoints, and put them in the checkpoints folder, the expected directory structure:
+4. For feature extractors like coop, cocoop, adapter and lora, first download according pre-trained checkpoints [here](https://drive.google.com/file/d/1Q2J8pNkltHC5iL6qFNtjU5bUYUMfKnXF/view?usp=drive_link), and unpack it ```tar -xzvf FMA_PEFT.tar.gz``` , the expected directory structure:
 ```
 checkpoints/
 ├── eurosat/
