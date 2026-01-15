@@ -4,21 +4,10 @@ import torch.nn as nn
 import clip
 from clip.simple_tokenizer import SimpleTokenizer as _Tokenizer
 from einops import pack, repeat
-
+from .clip_extractor import CLS2DIR
 _tokenizer = _Tokenizer()
 
-cls2dir = {
-    "OxfordPets": "oxford_pets",
-    "OxfordFlowers": "oxford_flowers",
-    "FGVCAircraft": "fgvc_aircraft",
-    "DescribableTextures": "dtd",
-    "EuroSAT": "eurosat",
-    "StanfordCars": "stanford_cars",
-    "Food101": "food101",
-    "SUN397": "sun397",
-    "Caltech101": "caltech101",
-    "UCF101": "ucf101",
-    "ImageNet": "imagenet",}
+
 # From CoOp, but ONLY support the setting: n_ctx=16, ctx_init=false, csc=False
 class PromptLearner(nn.Module):
     def __init__(self, cfg,  clip_model):
@@ -58,8 +47,10 @@ class PromptLearner(nn.Module):
 
         self.load_ctx(cfg)
 
+
+
     def load_ctx(self,cfg):
-        ckpt_path = f'./checkpoints/{cls2dir[cfg.dataset]}/{cfg.feature_extractor}/vit_b16_{cfg.num_shots}s.pth'
+        ckpt_path = f'./checkpoints/{CLS2DIR[cfg.dataset]}/{cfg.feature_extractor}/vit_b16_{cfg.num_shots}s.pth'
         print(f"Loading CoOp context weights from {ckpt_path}")
         ckpt = torch.load(ckpt_path, map_location="cpu")
         state_dict = ckpt['state_dict']
@@ -99,6 +90,10 @@ class CoOpFeatureExtractor(nn.Module):
             class_embeddings = x[torch.arange(x.shape[0]), self.prompt_learner.tokenized_prompts.argmax(dim=-1)] @ self.clip_model.text_projection
             self.class_embeddings = class_embeddings / class_embeddings.norm(dim=-1, keepdim=True)
         
+        # don't update the Feature Extractor weights (CLIP + CoOP)
+        for param in self.parameters():
+            param.requires_grad = False
+
     @torch.no_grad()
     def forward(self, images,labels):
         images, labels = images.to(self.device), labels.to(self.device)

@@ -97,7 +97,8 @@ def main():
             test_fma(model,train_loader,feat_extractor,steps=1,stepsize=0.1,cfg=cfg)
 
     print(f'Final Testing On Test Dataset ',end=' ')
-    test_acc = test_fma(model,test_loader,feat_extractor,steps=1,stepsize=0.1, cfg=cfg)
+    for steps in [0,1,2,3,4,5,6,7,8,9,10]:
+        test_acc = test_fma(model,test_loader,feat_extractor,steps=steps,stepsize=0.1, cfg=cfg)
 
     torch.save(model.state_dict(), os.path.join(cfg.save_dir,'model.pth'))
     print(f"Dataset:{cfg.dataset}; Test accuracy: {test_acc:.4f}; Velocity saved at {cfg.save_dir}/model.pth")

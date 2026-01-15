@@ -77,11 +77,11 @@ mkdir -p data
 ```
 checkpoints/
 ├── eurosat/
-│   └── coop/
-│       └── vit_b16_16s.pth
-|   └── cocoop/
-│       └── vit_b16_16s.pth
+│   └── coop_vit_b16_16s.pth
+│   └── adapter_vit_b16_16s.pth
+|   └── lora_vit_b16_16s.pth
 |   └── ...
+|
 ├── oxford_pets/
 ├── ...
 ```

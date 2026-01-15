@@ -37,7 +37,7 @@ class DefaultConfig:
         # =================================================================
         # Basic Training Parameters
         # =================================================================
-        self.epochs = 600
+        self.epochs = 200
         self.warmup_epochs = 1
         self.batch_size = 32
         self.lr = 2e-4
@@ -65,7 +65,7 @@ class DefaultConfig:
         # Other Parameters
         # =================================================================
         self.device = 'cuda' if torch.cuda.is_available() else "cpu"
-        self.timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.timestamp = datetime.datetime.now().strftime("%H%M%S")
         self.save_dir = f'./checkpoints/{self.timestamp}'
         self.dataset_root = './data/'
 
@@ -105,8 +105,8 @@ class DefaultConfig:
         parser.add_argument('--num_shots', type=int, default=None,
                           help='Number of shots for few-shot learning (e.g., 1, 2, 4, 8, 16)')
         parser.add_argument('--feature_extractor', type=str, default=None,
-                          choices=['clip', 'coop', 'cocoop'],
-                          help='Feature extractor to use (clip, coop, or cocoop)')
+                          choices=['clip', 'coop', 'cocoop','adapter','lora'],
+                          help='Feature extractor to use (clip, coop, cocoop, adapter or lora)')
         parser.add_argument('--gamma', type=float, default=None,
                           help='Stochastic noise level for feature interpolation')
         args = parser.parse_args()
