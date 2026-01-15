@@ -9,6 +9,7 @@ import sys
 from torch.cuda.amp import autocast
 from models.feature_extractor import get_extractor
 from datasets import build_dataset
+from einops import einsum
 
 @torch.no_grad()
 def test_fma(model, data_loader,feat_extractor,steps,stepsize,cfg):
@@ -30,7 +31,10 @@ def test_fma(model, data_loader,feat_extractor,steps,stepsize,cfg):
                 t = t + stepsize
             # calculate accuracy
             transfer_features = transfer_features / transfer_features.norm(dim=-1, keepdim=True)
-            similarities = (transfer_features @ class_embeddings.T).softmax(dim=-1) #[N,C]
+            if cfg.feature_extractor == 'cocoop':
+                similarities = einsum(transfer_features, class_embeddings, 'batch dim, batch cls dim -> batch cls')
+            else:
+                similarities = (transfer_features @ class_embeddings.T).softmax(dim=-1) #[N,C]
             predicted_labels = similarities.argmax(dim=-1).cpu()
             correct += (predicted_labels == labels).sum().item()
             total += labels.size(0)

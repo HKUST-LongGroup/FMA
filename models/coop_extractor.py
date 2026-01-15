@@ -30,7 +30,7 @@ class PromptLearner(nn.Module):
         prompts = [prompt_prefix + " " + name + "." for name in classnames]
 
   
-        tokenized_prompts = clip.tokenize(prompts).to(cfg.device)  # [n_cls, dim]
+        tokenized_prompts = clip.tokenize(prompts).to(cfg.device)  # [n_cls, dim], used to index the eot token
         with torch.no_grad():
             embedding = clip_model.token_embedding(tokenized_prompts).type(dtype) # input to the transformer
 
@@ -85,8 +85,6 @@ class CoOpFeatureExtractor(nn.Module):
             x = x.permute(1, 0, 2)  # LND -> NLD
             x = self.clip_model.ln_final(x).type(self.clip_model.dtype)
 
-            # x.shape = [batch_size, n_ctx, transformer.width]
-            # take features from the eot embedding (eot_token is the highest number in each sequence)
             class_embeddings = x[torch.arange(x.shape[0]), self.prompt_learner.tokenized_prompts.argmax(dim=-1)] @ self.clip_model.text_projection
             self.class_embeddings = class_embeddings / class_embeddings.norm(dim=-1, keepdim=True)
         
@@ -99,7 +97,6 @@ class CoOpFeatureExtractor(nn.Module):
         images, labels = images.to(self.device), labels.to(self.device)
         image_features = self.clip_model.encode_image(images) # preprocess is integrated in dataloader
         text_features = self.class_embeddings[labels]
-        # Normalize the features
         image_features = image_features / image_features.norm(p=2, dim=-1, keepdim=True)
         text_features = text_features / text_features.norm(p=2, dim=-1, keepdim=True)
 
