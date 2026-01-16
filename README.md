@@ -73,10 +73,9 @@ mkdir -p data
 checkpoints/
 ├── eurosat/
 │   └── coop_vit_b16_16s.pth
+│   └── cocoop_vit_b16_16s.pth
 │   └── adapter_vit_b16_16s.pth
 |   └── lora_vit_b16_16s.pth
-|   └── ...
-|
 ├── oxford_pets/
 ├── ...
 ```
@@ -96,7 +95,7 @@ You can also modify the default configuration in `config.py`:
 ```python
 class DefaultConfig:
     def __init__(self):
-        self.epochs = 600
+        self.epochs = 200
         self.batch_size = 32
         self.lr = 2e-4
         self.clip_type = 'ViT-B/16'  # CLIP backbone
@@ -144,7 +143,7 @@ This arguments will override the default setting( in ```DefaultConfig```).
 Training creates a timestamped checkpoint directory:
 ```
 checkpoints/
-└── 20251021_010857/
+└── 010857/
     ├── config.json      # Training configuration
     ├── model.pth        # Trained model weights
     └── log.txt          # Training logs
@@ -162,7 +161,7 @@ python test.py <timestamp>
 
 Example:
 ```bash
-python test.py 20251021_010857
+python test.py 010857
 ```
 
 This will:
@@ -180,8 +179,13 @@ This will:
 ├── test.py                    # Evaluation script
 ├── models/
 │   ├── fm.py                  # Flow matching network
-│   ├── feature_extractor.py  # Feature extraction interface
-│   └── clip_extractor.py     # CLIP feature extractor
+│   ├── utils.py               # Tool definition and class.
+│   ├── feature_extractor.py   # Feature extraction interface
+│   ├── coop_extractor.py      # CoOp extraction interface
+│   ├── cocoop_extractor.py    # CoCoOp extraction interface
+│   ├── lora_extractor.py      # CLIP-LoRA extraction interface
+│   ├── adapter_extractor.py   # CLIP-Adapter extraction interface
+│   └── clip_extractor.py      # CLIP feature extractor
 ├── datasets/
 │   ├── __init__.py           # Dataset registry
 │   ├── eurosat.py            # EuroSAT dataset
