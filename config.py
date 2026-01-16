@@ -107,10 +107,16 @@ class DefaultConfig:
         parser.add_argument('--feature_extractor', type=str, default=None,
                           choices=['clip', 'coop', 'cocoop','adapter','lora'],
                           help='Feature extractor to use (clip, coop, cocoop, adapter or lora)')
-        parser.add_argument('--seed', type=int, default=1,
+        parser.add_argument('--seed', type=int, default=None,
                           help='Random seed for reproducibility')
         parser.add_argument('--gamma', type=float, default=None,
                           help='Stochastic noise level for feature interpolation')
+        parser.add_argument('--epochs', type=int, default=None,
+                          help='Number of training epochs')
+        parser.add_argument('--batch_size', type=int, default=None,
+                          help='Batch size for training')
+        parser.add_argument('--blocks', type=int, default=None,
+                            help='Number of res blocks in velocity network')
         args = parser.parse_args()
         
         # Only update user-specified parameters (non-None parameters)
@@ -124,6 +130,12 @@ class DefaultConfig:
             self.gamma = args.gamma
         if args.seed is not None:
             self.seed = args.seed
+        if args.epochs is not None:
+            self.epochs = args.epochs
+        if args.batch_size is not None:
+            self.batch_size = args.batch_size
+        if args.blocks is not None:
+            self.blocks = args.blocks
         
         return self
     

@@ -70,7 +70,7 @@ mkdir -p data
 
 4. For feature extractors like coop, cocoop, adapter and lora, first download according pre-trained checkpoints [here](https://drive.google.com/file/d/1Q2J8pNkltHC5iL6qFNtjU5bUYUMfKnXF/view?usp=drive_link), and unpack it ```tar -xzvf FMA_PEFT.tar.gz``` , the expected directory structure:
 ```
-checkpoints/
+.checkpoints/
 ├── eurosat/
 │   └── coop_vit_b16_16s.pth
 │   └── cocoop_vit_b16_16s.pth
@@ -122,6 +122,9 @@ python train.py --feature_extractor coop
 
 # Combine multiple options
 python train.py --dataset UCF101 --num_shots 4 --feature_extractor clip
+
+# other options, like seed, epochs, batch size, blocks, etc.
+python train.py --dataset UCF101 --num_shots 4 --feature_extractor lora --seed 1 --epochs 300 --batch_size 64 --blocks 5
 ```
 
 This arguments will override the default setting( in ```DefaultConfig```).
