@@ -41,9 +41,9 @@ class DefaultConfig:
         self.warmup_epochs = 1
         self.batch_size = 32
         self.lr = 2e-4
+        self.seed = 1
         self.weight_decay = 0.01
         self.optimizer = 'adamw'
-        self.seed = 1
         self.gamma = 0 # control the stochastic noise level
         # =================================================================
         #  Model and Dataset Specific Parameters
@@ -107,6 +107,8 @@ class DefaultConfig:
         parser.add_argument('--feature_extractor', type=str, default=None,
                           choices=['clip', 'coop', 'cocoop','adapter','lora'],
                           help='Feature extractor to use (clip, coop, cocoop, adapter or lora)')
+        parser.add_argument('--seed', type=int, default=1,
+                          help='Random seed for reproducibility')
         parser.add_argument('--gamma', type=float, default=None,
                           help='Stochastic noise level for feature interpolation')
         args = parser.parse_args()
@@ -120,6 +122,8 @@ class DefaultConfig:
             self.feature_extractor = args.feature_extractor
         if args.gamma is not None:
             self.gamma = args.gamma
+        if args.seed is not None:
+            self.seed = args.seed
         
         return self
     

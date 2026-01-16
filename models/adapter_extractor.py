@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import clip
-from .clip_extractor import CUSTOM_TEMPLATES, CLS2DIR
+from .utils import CUSTOM_TEMPLATES, CLS2DIR
 
 
 
@@ -25,10 +25,12 @@ class AdapterFeatureExtractor(nn.Module):
         self.clip_model, self.clip_processor = clip.load(config.clip_type, device=config.device)
         self.device = config.device
         self.clip_model.to(self.device)
+        self.clip_model.float()
         self.adapter = Adapter(self.clip_model.visual.output_dim)
 
         # prepare class embeddings
         classnames = [name.replace("_", " ") for name in config.classnames]
+    
         template = CUSTOM_TEMPLATES.get(config.dataset, "a photo of a {}.")
         self.prompts = [template.format(c.replace("_", " ")) for c in classnames]
         with torch.no_grad():
@@ -40,7 +42,6 @@ class AdapterFeatureExtractor(nn.Module):
         # don't update the feature extractor weights (CLIP + Adapter)
         for param in self.parameters():
             param.requires_grad = False
-        import pdb; pdb.set_trace()
     
     def load_adapter(self, config):
         ckpt_path = f'./checkpoints/{CLS2DIR[config.dataset]}/{config.feature_extractor}_vit_b16_{config.num_shots}s.pth'

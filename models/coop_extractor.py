@@ -4,7 +4,7 @@ import torch.nn as nn
 import clip
 from clip.simple_tokenizer import SimpleTokenizer as _Tokenizer
 from einops import pack, repeat
-from .clip_extractor import CLS2DIR
+from .utils import CLS2DIR
 _tokenizer = _Tokenizer()
 
 
@@ -50,7 +50,7 @@ class PromptLearner(nn.Module):
 
 
     def load_ctx(self,cfg):
-        ckpt_path = f'./checkpoints/{CLS2DIR[cfg.dataset]}/{cfg.feature_extractor}/vit_b16_{cfg.num_shots}s.pth'
+        ckpt_path = f'./checkpoints/{CLS2DIR[cfg.dataset]}/{cfg.feature_extractor}_vit_b16_{cfg.num_shots}s.pth'
         print(f"Loading CoOp context weights from {ckpt_path}")
         ckpt = torch.load(ckpt_path, map_location="cpu")
         state_dict = ckpt['state_dict']

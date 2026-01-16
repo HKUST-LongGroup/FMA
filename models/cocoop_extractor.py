@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import clip
 from collections import OrderedDict
-from .clip_extractor import CLS2DIR
+from .utils import CLS2DIR
 from clip.simple_tokenizer import SimpleTokenizer as _Tokenizer
 from einops import pack, repeat, rearrange
 
