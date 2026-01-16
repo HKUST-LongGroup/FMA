@@ -3,11 +3,6 @@
 Official implementation of the paper [Exploring Cross-Modal Flows for Few-Shot Learning](https://arxiv.org/abs/2510.14543).
 
 
-## TODO 
-- FMA framework. ✅
-- Support CLIP and CoOp extractor. ✅
-- Other extractor and checkpoints: cocoop, lora, adapter.
-
 
 ## Table of Contents
 

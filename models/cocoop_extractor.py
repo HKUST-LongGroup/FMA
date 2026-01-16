@@ -8,13 +8,14 @@ from einops import pack, repeat, rearrange
 
 _tokenizer = _Tokenizer()
 
+# For acceleration, we delete all 'for loops' in the original code and use batch matrix operations.
 class PromptLearner(nn.Module):
     def __init__(self, cfg, clip_model):
         super().__init__()
       
         self.n_cls = len(cfg.classnames)
         vis_dim = clip_model.visual.output_dim
-        prompt_prefix = "a photo of a"
+
         self.n_ctx = len(prompt_prefix.split(" "))
 
         self.meta_net = nn.Sequential(OrderedDict([
@@ -25,7 +26,7 @@ class PromptLearner(nn.Module):
 
         self.ctx = nn.Parameter(torch.randn(self.n_ctx, vis_dim))
         classnames = [name.replace("_", " ") for name in cfg.classnames]
-        prompts = [prompt_prefix + " " + name + "." for name in classnames]
+        prompts = [f"a photo of a {name}." for name in classnames]
 
         self.tokenized_prompts = torch.cat([clip.tokenize(p) for p in prompts]).to(cfg.device) # (n_cls, n_tkn)
         with torch.no_grad():
