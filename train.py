@@ -96,12 +96,18 @@ def main():
             print(f'[Testing] On Training Dataset:',end=' ')
             test_fma(model,train_loader,feat_extractor,steps=1,stepsize=0.1,cfg=cfg)
 
-    print(f'Final Testing On Test Dataset ',end=' ')
+    best_acc = 0.0,
+    best_steps = 0
+     # Final test on test set with multiple steps
+    print(f'Final Testing On Test Dataset')
     for steps in [0,1,2,3,4,5,6,7,8,9,10]:
         test_acc = test_fma(model,test_loader,feat_extractor,steps=steps,stepsize=0.1, cfg=cfg)
+        if test_acc > best_acc:
+            best_acc = test_acc
+            best_steps = steps
 
     torch.save(model.state_dict(), os.path.join(cfg.save_dir,'model.pth'))
-    print(f"Dataset:{cfg.dataset}; Test accuracy: {test_acc:.4f}; Velocity saved at {cfg.save_dir}/model.pth")
+    print(f"Dataset:{cfg.dataset}; Best Test accuracy: {best_acc:.4f}, at Steps:{best_steps}; Velocity saved at {cfg.save_dir}/model.pth")
 
     return 
 

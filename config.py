@@ -58,7 +58,7 @@ class DefaultConfig:
 
         self.num_shots = 16    # [1, 2, 4, 8, 16]
         self.subsample_classes = 'all'  # ['base', 'new', 'all']
-        self.feature_extractor = 'coop'  # ['clip', 'coop','cocoop']
+        self.feature_extractor = 'clip'  # ['clip', 'coop','cocoop']
         self.blocks = 12
 
         # =================================================================
