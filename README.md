@@ -137,8 +137,18 @@ This arguments will override the default setting( in ```DefaultConfig```).
 - `--num_shots`: Number of shots for few-shot learning (default: `16`)
   - Options: `1`, `2`, `4`, `8`, `16`
   
-- `--feature_extractor`: Feature extractor type (default: `clip`)
-  - Options: `clip`, `coop`, `cocoop`
+- `--feature_extractor`: Feature extractor type (default: `coop`)
+  - Options: `clip`, `coop`, `cocoop`, `adapter`, `lora`
+
+- `--seed`: Random seed for reproducibility (default: `1`)
+
+- `--gamma`: Stochastic noise level for feature interpolation (default: `0`)
+
+- `--epochs`: Number of training epochs (default: `200`)
+
+- `--batch_size`: Batch size for training (default: `32`)
+
+- `--blocks`: Number of residual blocks in velocity network (default: `12`)
 
 
 ### Training Output

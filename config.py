@@ -105,7 +105,6 @@ class DefaultConfig:
         parser.add_argument('--num_shots', type=int, default=None,
                           help='Number of shots for few-shot learning (e.g., 1, 2, 4, 8, 16)')
         parser.add_argument('--feature_extractor', type=str, default=None,
-                          choices=['clip', 'coop', 'cocoop','adapter','lora'],
                           help='Feature extractor to use (clip, coop, cocoop, adapter or lora)')
         parser.add_argument('--seed', type=int, default=None,
                           help='Random seed for reproducibility')
