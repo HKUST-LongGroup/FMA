@@ -89,36 +89,6 @@ Train a model with default configuration (EuroSAT, 16-shot, CLIP ViT-B/16):
 ```bash
 python train.py
 ```
-
-### Custom Configuration
-
-You can customize the training by specifying command-line arguments:
-
-```bash
-# Train on a specific dataset
-python train.py --dataset OxfordPets
-
-# Specify number of shots
-python train.py --dataset EuroSAT --num_shots 8
-
-# Choose feature extractor
-python train.py --feature_extractor coop
-
-# Combine multiple options
-python train.py --dataset UCF101 --num_shots 4 --feature_extractor clip
-```
-
-### Available Arguments
-
-- `--dataset`: Dataset name (default: `EuroSAT`)
-  - Options: `OxfordPets`, `EuroSAT`, `UCF101`, `SUN397`, `Caltech101`, `DescribableTextures`, `FGVCAircraft`, `Food101`, `OxfordFlowers`, `StanfordCars`, `ImageNet`
-  
-- `--num_shots`: Number of shots for few-shot learning (default: `16`)
-  - Options: `1`, `2`, `4`, `8`, `16`
-  
-- `--feature_extractor`: Feature extractor type (default: `clip`)
-  - Options: `clip`, `coop`, `cocoop`
-
 ### Configuration File
 
 You can also modify the default configuration in `config.py`:
@@ -135,6 +105,39 @@ class DefaultConfig:
         self.blocks = 12  # Number of residual blocks
         # ... other parameters
 ```
+
+
+### Custom Configuration
+
+In addition to edit the ```config.py```, you can also customize the training by specifying command-line arguments:
+
+```bash
+# Train on a specific dataset
+python train.py --dataset OxfordPets
+
+# Specify number of shots
+python train.py --dataset EuroSAT --num_shots 8
+
+# Choose feature extractor
+python train.py --feature_extractor coop
+
+# Combine multiple options
+python train.py --dataset UCF101 --num_shots 4 --feature_extractor clip
+```
+
+This arguments will override the default setting( in ```DefaultConfig```).
+
+### Available Arguments
+
+- `--dataset`: Dataset name (default: `EuroSAT`)
+  - Options: `OxfordPets`, `EuroSAT`, `UCF101`, `SUN397`, `Caltech101`, `DescribableTextures`, `FGVCAircraft`, `Food101`, `OxfordFlowers`, `StanfordCars`, `ImageNet`
+  
+- `--num_shots`: Number of shots for few-shot learning (default: `16`)
+  - Options: `1`, `2`, `4`, `8`, `16`
+  
+- `--feature_extractor`: Feature extractor type (default: `clip`)
+  - Options: `clip`, `coop`, `cocoop`
+
 
 ### Training Output
 
