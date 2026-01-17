@@ -6,11 +6,11 @@ Official implementation of the paper [Exploring Cross-Modal Flows for Few-Shot L
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Dataset Preparation](#dataset-preparation)
-- [Training](#training)
-- [Evaluation](#evaluation)
-- [Project Structure](#project-structure)
+- [Installation](#️-installation)
+- [Dataset Preparation](#-dataset-preparation)
+- [Training](#-training)
+- [Evaluation](#-evaluation)
+- [Project Structure](#-project-structure)
 - [Citation](#citation)
 
 ## ⚙️ Installation

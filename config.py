@@ -66,7 +66,7 @@ class DefaultConfig:
         # =================================================================
         self.device = 'cuda' if torch.cuda.is_available() else "cpu"
         self.timestamp = datetime.datetime.now().strftime("%H%M%S")
-        self.save_dir = f'./checkpoints/{self.timestamp}'
+        self.save_dir = f'./checkpoints/exp/{self.timestamp}'
         self.dataset_root = './data/'
 
 

@@ -96,7 +96,7 @@ def main():
             print(f'[Testing] On Training Dataset:',end=' ')
             test_fma(model,train_loader,feat_extractor,steps=1,stepsize=0.1,cfg=cfg)
 
-    best_acc = 0.0,
+    best_acc = 0.0
     best_steps = 0
      # Final test on test set with multiple steps
     print(f'Final Testing On Test Dataset')

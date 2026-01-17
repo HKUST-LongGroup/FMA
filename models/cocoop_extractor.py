@@ -15,7 +15,7 @@ class PromptLearner(nn.Module):
       
         self.n_cls = len(cfg.classnames)
         vis_dim = clip_model.visual.output_dim
-
+        prompt_prefix = 'a photo of a'
         self.n_ctx = len(prompt_prefix.split(" "))
 
         self.meta_net = nn.Sequential(OrderedDict([
@@ -26,7 +26,7 @@ class PromptLearner(nn.Module):
 
         self.ctx = nn.Parameter(torch.randn(self.n_ctx, vis_dim))
         classnames = [name.replace("_", " ") for name in cfg.classnames]
-        prompts = [f"a photo of a {name}." for name in classnames]
+        prompts =[prompt_prefix + ' ' + cname + '.' for cname in classnames]
 
         self.tokenized_prompts = torch.cat([clip.tokenize(p) for p in prompts]).to(cfg.device) # (n_cls, n_tkn)
         with torch.no_grad():
