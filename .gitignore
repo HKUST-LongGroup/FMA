@@ -92,3 +92,5 @@ logs/
 
 *.sh
 
+train_neg.py
+
