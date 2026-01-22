@@ -13,7 +13,6 @@ def main():
     #set up config, seed and log
     cfg = DefaultConfig()
     cfg.parse_args()  # parse command line args to override the defaults
-    cfg.save_dir = f'./checkpoints/exp/{cfg.feature_extractor}/{cfg.timestamp}'
     cfg.save()
     set_seed(cfg.seed)
     sys.stdout = SimpleLogger(os.path.join(cfg.save_dir,"log.txt"))
@@ -26,7 +25,7 @@ def main():
     
     train_loader = DataLoader(dataset.train_x, batch_size=cfg.batch_size, shuffle=True, num_workers=8, pin_memory=True)
     test_loader = DataLoader(dataset.test, batch_size=cfg.batch_size, shuffle=False, num_workers=8, pin_memory=True)
-    # val_loader = DataLoader(dataset.val, batch_size=cfg.batch_size, shuffle=False, num_workers=8, pin_memory=True)
+    val_loader = DataLoader(dataset.val, batch_size=cfg.batch_size, shuffle=False, num_workers=8, pin_memory=True)
 
 
 
@@ -58,19 +57,36 @@ def main():
             # Using different feature extraction to extract paired image and text features
             with autocast():
 
-                image_features, text_features, _ = feat_extractor(images,labels)
+                image_features, text_features, class_embeddings = feat_extractor(images,labels)
                 t = torch.rand(image_features.size(0),1,device=cfg.device)
                 # FMC Framework
                 # (1) interpolate the features
                 noise = torch.randn_like(image_features)
-                interpolated_features = (1 - t) * image_features + t * text_features + cfg.gamma*torch.sqrt(t*(1-t))*noise
+                def get_neg_labels(num_classes,neg_samples, pos_labels):
+                    batch_size = len(pos_labels)
+                    pos_labels = pos_labels.to(cfg.device) # [B,1]
 
+                    noise = torch.rand(batch_size,num_classes-1,device=cfg.device) # [B, C-1]
+                    random_indices = torch.argsort(noise,dim=1)[:,:neg_samples] #[ B, neg_samples]
+                    offset = random_indices + 1 # [B, neg_samples]
+                    neg_labels = (pos_labels.unsqueeze(1) + offset) % num_classes
+
+                    return neg_labels
+                num_classes = class_embeddings.shape[0] if cfg.feature_extractor != 'cocoop' else class_embeddings.shape[1]
+                # neg_labels = get_neg_labels(num_classes=num_classes,neg_samples=cfg.neg_samples, pos_labels=labels) #[B, neg_samples]
+                # if cfg.feature_extractor == 'cocoop': #class_embeddings : [B, n_cls, dim]
+                    # neg_text_features = class_embeddings[torch.arange(class_embeddings.size(0)).unsqueeze(1), neg_labels] # class _embeddings: [B, dim]
+                # else:
+                    # neg_text_features = class_embeddings[neg_labels] # class _embeddings: [B, dim]
+                # neg_text_features = torch.mean(neg_text_features,dim=1) # [B, dim]
+                interpolated_features = (1 - t) * image_features + t * text_features  - cfg.neg_gamma*t*(1-t)*neg_text_features + cfg.gamma*torch.sqrt(t*(1-t))*noise
+                
                 # (2) predict the velocity
                 velocity_pred = model(interpolated_features,t)
 
                 # (3) feature transfer to the target x_1
                 # transfer_features = interpolated_features + velocity* (1-t)
-                velocity_gt = text_features - image_features + cfg.gamma* 0.5*(1-2*t)/torch.sqrt(t*(1-t))*noise
+                velocity_gt = text_features - image_features - cfg.neg_gamma*(1-2*t)*neg_text_features + cfg.gamma*0.5*(1-2*t)/torch.sqrt(t*(1-t))*noise
 
                 loss = torch.sum((velocity_pred-velocity_gt)**2,dim=1).mean() 
 
@@ -108,7 +124,7 @@ def main():
             best_steps = steps
 
     torch.save(model.state_dict(), os.path.join(cfg.save_dir,'model.pth'))
-    print(f"Dataset:{cfg.dataset}; Best Test accuracy: {best_acc:.4f}, at Steps:{best_steps}; Velocity saved at {cfg.save_dir}/model.pth")
+    print(f"Dataset:{cfg.dataset}; Feature Extractor:{cfg.feature_extractor}; Best Test accuracy: {best_acc:.4f}, at Steps:{best_steps}; Velocity saved at {cfg.save_dir}/model.pth")
 
     return 
 

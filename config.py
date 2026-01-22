@@ -66,10 +66,11 @@ class DefaultConfig:
         # =================================================================
         self.device = 'cuda' if torch.cuda.is_available() else "cpu"
         self.timestamp = datetime.datetime.now().strftime("%H%M%S")
-        self.save_dir = f'./checkpoints/exp/{self.timestamp}'
         self.dataset_root = './data/'
 
-
+        # negative flow matching
+        # self.neg_gamma = 1
+        # self.neg_samples = 9
     def save(self, file_path=None):
         """Save configuration to JSON file"""
         if file_path is None:
@@ -116,6 +117,10 @@ class DefaultConfig:
                           help='Batch size for training')
         parser.add_argument('--blocks', type=int, default=None,
                             help='Number of res blocks in velocity network')
+        parser.add_argument('--neg_samples', type=int, default=None,
+                            help='Number of negative samples for negative flow matching')
+        parser.add_argument('--neg_gamma', type=float, default=None,
+                            help='Negative flow matching gamma parameter')
         args = parser.parse_args()
         
         # Only update user-specified parameters (non-None parameters)
@@ -135,6 +140,12 @@ class DefaultConfig:
             self.batch_size = args.batch_size
         if args.blocks is not None:
             self.blocks = args.blocks
+        
+        # for negative flow matching
+        if args.neg_samples is not None:
+            self.neg_samples = args.neg_samples
+        if args.neg_gamma is not None:
+            self.neg_gamma = args.neg_gamma
         
         return self
     
