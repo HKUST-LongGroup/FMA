@@ -77,6 +77,7 @@ class CoCoOpFeatureExtractor(nn.Module):
    
         
     # the class embeddings are instance-specific, so we cannot cache them in init function (like CoOp)
+    @torch.no_grad()
     def forward(self, images, labels):
         images, labels = images.to(self.device), labels.to(self.device)
         image_features = self.clip_model.encode_image(images) # preprocess is integrated in dataloader  (batch_size, dim)

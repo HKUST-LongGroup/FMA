@@ -46,12 +46,13 @@ def main():
 
      # Initial test before training
 
-    print(f'[Testing] on Test Dataset:',end=' ')
-    test_fma(model,test_loader,feat_extractor,steps=0,stepsize=0.1,cfg=cfg)
+    # print(f'[Testing] on Test Dataset:',end=' ')
+    # test_fma(model,test_loader,feat_extractor,steps=0,stepsize=0.1,cfg=cfg)
 
+    # clear segemented memory, in case of OOM.
     model.train()
     for epoch in range(cfg.epochs):
-    # every 20 epochs, evaluate the model on the test set, then save the best model
+    # every 50 epochs, evaluate the model on the test set, then save the best model
 
         for images,labels in train_loader:
             
