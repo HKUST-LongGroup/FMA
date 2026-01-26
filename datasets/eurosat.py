@@ -58,7 +58,6 @@ class EuroSAT(DatasetBase):
 
         subsample = cfg.subsample_classes
         train, val, test = OxfordPets.subsample_classes(train, val, test, subsample=subsample)
-
         super().__init__(train_x=train, val=val, test=test)
 
     def update_classname(self, dataset_old):

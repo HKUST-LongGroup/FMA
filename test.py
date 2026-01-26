@@ -21,7 +21,10 @@ def test_fma(model, data_loader,feat_extractor,steps,stepsize,cfg):
     
     for images,labels in data_loader:
         with autocast():
-            image_features, _, class_embeddings = feat_extractor(images,labels)
+            if cfg.feature_extractor == 'cocoop':
+                image_features, _, class_embeddings = feat_extractor(images,labels,training=False)
+            else:
+                image_features, _, class_embeddings = feat_extractor(images,labels)
             transfer_features = image_features
             # perform inference steps
             t = torch.zeros((image_features.shape[0],1),device=device)
