@@ -90,7 +90,7 @@ def main():
                 scheduler.step()
 
         print(f"[Training] Epoch [{epoch+1}/{cfg.epochs}], Loss: {loss.item():.4f}, LR: {optimizer.param_groups[0]['lr']:.6f}") 
-        
+        torch.save(model.state_dict(), os.path.join(cfg.save_dir,'model.pth'))
         # if (epoch+1) % 50 == 0:
         #     print(f'[Testing] On Test Dataset:',end=' ')
         #     test_fma(model,test_loader,feat_extractor,steps=1,stepsize=0.1, cfg=cfg)
@@ -108,7 +108,7 @@ def main():
             best_acc = test_acc
             best_steps = steps
 
-    torch.save(model.state_dict(), os.path.join(cfg.save_dir,'model.pth'))
+ 
     print(f"Dataset:{cfg.dataset}, Blocks:{cfg.blocks}, Seed:{cfg.seed}; Best Accuracy: {best_acc:.4f}, at Steps:{best_steps}; Velocity saved at {cfg.save_dir}/model.pth")
 
     return 
