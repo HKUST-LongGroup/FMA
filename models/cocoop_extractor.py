@@ -88,6 +88,7 @@ class CoCoOpFeatureExtractor(nn.Module):
         prompts = rearrange(prompts, 'b c n d -> (b c) n d')  # (batch_size*n_cls, 77, ctx_dim)
         x = prompts.type(self.clip_model.dtype)
         x = x + self.clip_model.positional_embedding.type(self.clip_model.dtype)
+        
         x = x.permute(1, 0, 2)  # NLD -> LND, N = batch_size*n_cls
         x = self.clip_model.transformer(x)
         x = x.permute(1, 0, 2)  # LND -> NLD, N = batch_size*n_cls

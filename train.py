@@ -13,7 +13,7 @@ def main():
     #set up config, seed and log
     cfg = DefaultConfig()
     cfg.parse_args()  # parse command line args to override the defaults
-    cfg.save_dir = f'./checkpoints/exp/{cfg.feature_extractor}/{cfg.timestamp}'
+    cfg.save_dir = f'./checkpoints/exp/{cfg.timestamp}'
     cfg.save()
     set_seed(cfg.seed)
     sys.stdout = SimpleLogger(os.path.join(cfg.save_dir,"log.txt"))
@@ -91,12 +91,12 @@ def main():
 
         print(f"[Training] Epoch [{epoch+1}/{cfg.epochs}], Loss: {loss.item():.4f}, LR: {optimizer.param_groups[0]['lr']:.6f}") 
         
-        if (epoch+1) % 50 == 0:
-            print(f'[Testing] On Test Dataset:',end=' ')
-            test_fma(model,test_loader,feat_extractor,steps=1,stepsize=0.1, cfg=cfg)
+        # if (epoch+1) % 50 == 0:
+        #     print(f'[Testing] On Test Dataset:',end=' ')
+        #     test_fma(model,test_loader,feat_extractor,steps=1,stepsize=0.1, cfg=cfg)
 
-            print(f'[Testing] On Training Dataset:',end=' ')
-            test_fma(model,train_loader,feat_extractor,steps=1,stepsize=0.1,cfg=cfg)
+        #     print(f'[Testing] On Training Dataset:',end=' ')
+        #     test_fma(model,train_loader,feat_extractor,steps=1,stepsize=0.1,cfg=cfg)
 
     best_acc = 0.0
     best_steps = 0
@@ -109,7 +109,7 @@ def main():
             best_steps = steps
 
     torch.save(model.state_dict(), os.path.join(cfg.save_dir,'model.pth'))
-    print(f"Dataset:{cfg.dataset}; Best Test accuracy: {best_acc:.4f}, at Steps:{best_steps}; Velocity saved at {cfg.save_dir}/model.pth")
+    print(f"Dataset:{cfg.dataset}, Blocks:{cfg.blocks}, Seed:{cfg.seed}; Best Accuracy: {best_acc:.4f}, at Steps:{best_steps}; Velocity saved at {cfg.save_dir}/model.pth")
 
     return 
 

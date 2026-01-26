@@ -31,7 +31,7 @@ class OxfordFlowers(DatasetBase):
 
         num_shots = cfg.num_shots
         if num_shots >= 1:
-            seed = cfg.seed
+            seed = 1
             preprocessed = os.path.join(self.split_fewshot_dir, f"shot_{num_shots}-seed_{seed}.pkl")
             
             if os.path.exists(preprocessed):
